@@ -1,5 +1,4 @@
 'use client'
-import Card from "@/components/Card";
 import InputSection from "@/components/InputSection";
 import OtherCards from "@/components/OtherCards";
 import { ValuesContext } from "@/context/ValuesProvider";
@@ -7,7 +6,7 @@ import { useContext, useState } from "react";
 
 export default function Home() {
   
-  const { cards, otherCards, setOtherCards } = useContext(ValuesContext);
+  const { otherCards, setOtherCards } = useContext(ValuesContext);
 
 
   const [heading, setHeading] = useState<string>('');
@@ -37,11 +36,6 @@ export default function Home() {
         <InputSection />
 
       <div className="flex gap-7 mt-16 w-full">
-        {
-          cards.map((card, index) => {
-            return <Card key={index} heading={card.heading} type={card.type} />
-          })
-        }
         {
           otherCards.map((card, index) => {
             return <OtherCards key={index} id={index} heading={card.heading} type={card.type} />
