@@ -6,6 +6,8 @@ import { MdAddCircleOutline, MdDeleteForever, MdDeleteSweep, MdEdit } from "reac
 import { RiDragDropLine } from "react-icons/ri";
 import { TbDots } from "react-icons/tb";
 import { TiTick } from "react-icons/ti";
+import toast, { Toaster } from 'react-hot-toast';
+
 
 interface CardProps {
   type: string;
@@ -113,10 +115,12 @@ const Card = ({ heading, id }: CardProps) => {
         return card;
       })
     );
+
+
   }
-  
+
   const inp = useRef<HTMLInputElement | null>(null);
-  
+
   const handleItemEdit = (index: number) => {
     const updatedItems = [...data];
     updatedItems.splice(index, 1, <input className="border-b border-black shadow-2xl bg-slate-200 px-3 outline-none w-full" placeholder={data[index]} ref={inp} /> as unknown as string);
@@ -230,7 +234,10 @@ const Card = ({ heading, id }: CardProps) => {
       setCardScroll(false);
     }
   }, [data]);
-  
+
+  const notify = () => toast('Here is your toast.');
+
+
   return (
     <div
       className={`w-72 h-fit bg-slate-100 rounded-xl pb-5 max-h-[450px]  ${cardScroll ? 'overflow-y-scroll' : ''}`}
@@ -315,7 +322,10 @@ const Card = ({ heading, id }: CardProps) => {
                 </div>
 
                 <div
-                  onClick={() => handleItemDelete(index)}
+                  onClick={() => {
+                    handleItemDelete(index)
+                    notify()
+                  }}
                   className="h-6 w-6 shadow bg-red-500 text-white rounded-full flex justify-center items-center cursor-pointer hover:scale-105 active:scale-95">
                   <MdDeleteForever />
                 </div>
