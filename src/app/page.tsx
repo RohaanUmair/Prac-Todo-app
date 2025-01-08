@@ -1,11 +1,11 @@
 'use client'
 import InputSection from "@/components/InputSection";
-import OtherCards from "@/components/OtherCards";
+import Card from "@/components/Card";
 import { ValuesContext } from "@/context/ValuesProvider";
 import { useContext, useState } from "react";
 
 export default function Home() {
-  
+
   const { otherCards, setOtherCards } = useContext(ValuesContext);
 
 
@@ -20,8 +20,8 @@ export default function Home() {
       type: heading,
       items: []
     }
-    
-    for (let i = 0; i < otherCards.length; i++) {      
+
+    for (let i = 0; i < otherCards.length; i++) {
       if (otherCards[i].heading == heading) {
         alert('Card already exists');
         return;
@@ -32,17 +32,17 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen bg-blue-300 pl-12 overflow-x-auto min-w-full w-max overflow-hidden">
-        <InputSection />
+    <div className="h-screen bg-zinc-300 pl-12 overflow-x-auto min-w-full w-max overflow-hidden">
+      <InputSection />
 
-      <div className="flex gap-7 mt-16 w-full">
+      <div className="flex gap-5 mt-16 w-full">
         {
           otherCards.map((card, index) => {
-            return <OtherCards key={index} id={index} heading={card.heading} type={card.type} />
+            return <Card key={index} id={index} heading={card.heading} type={card.type} />
           })
         }
 
-        <div className="h-fit flex flex-col">
+        <div className="h-fit flex flex-col mr-5">
           {
             showForm &&
             <input type="text" placeholder="Heading" className="py-3 rounded-t outline-none px-5 w-52" onChange={(e) => setHeading(e.target.value)} />
@@ -51,12 +51,12 @@ export default function Home() {
             handleNewCard();
             setShowForm(!showForm);
           }} className={`bg-green-600 text-white py-3 shadow shadow-white outline-none cursor-pointer hover:bg-green-700 rounded-b px-8 w-52 ${showForm ? 'rounded-b' : 'rounded'}`}>{
-            showForm ? heading ? 'Add Card +' : 'Back' : 'New Card'
-          }
+              showForm ? heading ? 'Add Card +' : 'Back' : 'New Card'
+            }
           </button>
         </div>
       </div>
-      
+
     </div>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 import { ValuesContext } from "@/context/ValuesProvider";
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 
 const InputSection = () => {
     const context = useContext(ValuesContext);
@@ -8,7 +8,11 @@ const InputSection = () => {
     const { otherCards, setOtherCards } = context;
 
     const [input, setInput] = useState<string>('');
-    const [selected, setSelected] = useState<string>('toDo');
+
+    const [selected, setSelected] = useState<string>('To Do');
+    useEffect(() => {
+        setSelected(otherCards[0].heading);
+    }, [context]);
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>, input: string) => {
         e.preventDefault();
@@ -17,7 +21,7 @@ const InputSection = () => {
 
         setOtherCards((prevCards) => {
             const updatedCards = prevCards.map((card) => {
-                if (card.type === selected) {
+                if (card.heading === selected) {
                     return {
                         ...card,
                         items: [...card.items, input]
@@ -38,7 +42,7 @@ const InputSection = () => {
             <select onChange={(e) => setSelected(e.target.value)} className="w-24 outline-none h-14 rounded px-2" >
                 {
                     otherCards.map((card, index) => {
-                        return <option key={index} value={card.type}>{card.heading}</option>
+                        return <option key={index} value={card.heading}>{card.heading}</option>
                     })
                 }
             </select>
