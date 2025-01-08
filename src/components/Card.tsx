@@ -13,6 +13,8 @@ interface CardProps {
   id: number;
 }
 
+
+
 const Card = ({ heading, id }: CardProps) => {
   const context = useContext(ValuesContext);
 
@@ -112,12 +114,12 @@ const Card = ({ heading, id }: CardProps) => {
       })
     );
   }
-
+  
   const inp = useRef<HTMLInputElement | null>(null);
-
+  
   const handleItemEdit = (index: number) => {
     const updatedItems = [...data];
-    updatedItems.splice(index, 1, <input className="outline outline-1 w-full" ref={inp} /> as unknown as string);
+    updatedItems.splice(index, 1, <input className="border-b border-black shadow-2xl bg-slate-200 px-3 outline-none w-full" placeholder={data[index]} ref={inp} /> as unknown as string);
 
     if (inp.current) {
       inp.current.focus();
@@ -139,7 +141,12 @@ const Card = ({ heading, id }: CardProps) => {
 
   const handleEditSave = (index: number) => {
     const updatedItems = [...data];
-    updatedItems.splice(index, 1, inp.current?.value as string);
+
+    if (inp.current?.value == '') {
+      updatedItems.splice(index, 1, `Task ${index + 1}`);
+    } else {
+      updatedItems.splice(index, 1, inp.current?.value as string);
+    }
 
     const { setOtherCards } = context;
 
@@ -191,9 +198,42 @@ const Card = ({ heading, id }: CardProps) => {
     setOtherCards((prevCards) => prevCards.filter((card) => card.heading !== heading));
   }
 
+  const [lastY, setLastY] = useState(0);
+  const [mouseMove, setMouseMove] = useState<'up' | 'down'>('up');
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      const currentY = event.clientY;
+
+      if (currentY > lastY) {
+        setMouseMove('down');
+      } else if (currentY < lastY) {
+        setMouseMove('up');
+      }
+
+      setLastY(currentY);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [lastY]);
+
+  const [cardScroll, setCardScroll] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (data.length > 6) {
+      setCardScroll(true);
+    } else {
+      setCardScroll(false);
+    }
+  }, [data]);
+  
   return (
     <div
-      className="w-72 h-fit bg-slate-100 rounded-xl pb-5"
+      className={`w-72 h-fit bg-slate-100 rounded-xl pb-5 max-h-[450px]  ${cardScroll ? 'overflow-y-scroll' : ''}`}
       onDragOver={(e) => e.preventDefault()}
       onDragLeave={handleDragLeave}
     >
@@ -236,17 +276,20 @@ const Card = ({ heading, id }: CardProps) => {
         <div key={index} className="w-[80%] mx-auto">
           {hoveredIndex === index ? (
             <div
-              className={`bg-gray-300 my-2 border flex flex-col justify-between shadow rounded-lg  cursor-grab items-center`}
+              className={` my-2 flex bg-transparent justify-between rounded-lg  cursor-grab items-center ${mouseMove == 'up' ? "flex-col" : "flex-col-reverse"}`}
               draggable={true}
               onDragStart={(e) => handleDragStart(e, item)}
               onDragOver={(e) => handleDragOver(e, index)}
               onDrop={(e) => handleDrop(e, index)}
             >
-              <div className="h-10 rounded bg-black"></div>
+
+
+              <div className="h-10 rounded bg-black w-full -z-10"></div>
 
               <div className="h-1/2 w-full bg-white py-2 px-4 rounded">
-                <p className="text-gray-700">{item}</p>
+                <p className="text-gray-700 font-semibold">{item}</p>
               </div>
+
 
             </div>
           ) : (
@@ -289,6 +332,7 @@ const Card = ({ heading, id }: CardProps) => {
           onDrop={(e) => handleDrop(e, data.length)}
         ></div>
       ) : (
+
         <div
           onClick={handleAddItem}
           className="w-[80%] mx-auto h-10 border-dashed border-2 border-gray-300 my-2 rounded flex items-center px-4 hover:bg-zinc-300 text-zinc-500 cursor-pointer hover:justify-center transition-all hover:text-[17px] hover:text-black "
@@ -297,7 +341,7 @@ const Card = ({ heading, id }: CardProps) => {
         >
           <h1 className=" font-bold flex items-center justify-between w-full">
             <span className="flex items-center gap-2">Add <MdAddCircleOutline /></span>
-            <span className="flex items-center gap-2">or Drag <RiDragDropLine /></span>
+            <span className="flex items-center gap-2 text-[15px]">or Drag Here<RiDragDropLine /></span>
           </h1>
         </div>
       )}
