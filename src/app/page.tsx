@@ -38,7 +38,7 @@ export default function Home() {
       <div className="flex gap-5 mt-16 w-full">
         {
           otherCards.map((card, index) => {
-            return <Card key={index} id={index} heading={card.heading} type={card.type} />
+            return <Card key={index} id={index} heading={card.heading} />
           })
         }
 
