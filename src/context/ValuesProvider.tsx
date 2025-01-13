@@ -18,7 +18,7 @@ export const ValuesContext = createContext<ContextValuesTypes>({
 export const ValuesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const [otherCards, setOtherCards] = useState<{ heading: string, type: string, items: any[] }[]>([
-        { heading: 'To Do', type: 'toDo', items: ['a', 's'] },
+        { heading: 'To Do', type: 'toDo', items: [] },
         { heading: 'Doing', type: 'doing', items: [] },
         { heading: 'Done', type: 'done', items: [] }
     ]);

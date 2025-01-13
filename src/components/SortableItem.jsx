@@ -15,7 +15,7 @@ const GameItem = (props) => {
                 transition: transition
             }}
         >
-            <div className="rounded border w-[80%] mx-auto px-4 bg-white h-12 text-xl items-center flex border-black">
+            <div className="rounded border w-[80%] mx-auto px-4 bg-white h-12 text-xl items-center flex  border-black">
                 {props.children}
             </div>
         </div>
